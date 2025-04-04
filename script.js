@@ -1,48 +1,24 @@
 
-// Game state
+const socket = io();
 let wallet = 4.76;
 let currentPeriod = 202504040128;
 let timeRemaining = 59;
 let gameHistory = [];
+let selectedBet = null;
+let selectedAmount = 1;
 
-// Update wallet display
 function updateWallet() {
   document.querySelector('.balance').textContent = `₹${wallet.toFixed(2)}`;
 }
 
-// Update timer
 function updateTimer() {
   const minutes = Math.floor(timeRemaining / 60);
   const seconds = timeRemaining % 60;
   document.querySelector('.countdown').textContent = 
     `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  document.querySelector('.period').textContent = currentPeriod;
 }
 
-// Generate random result
-function generateResult() {
-  const number = Math.floor(Math.random() * 10);
-  let color;
-  if (number === 0 || number === 5) color = 'violet';
-  else if ([1,3,7,9].includes(number)) color = 'green';
-  else color = 'red';
-  
-  const bigSmall = number >= 5 ? 'Big' : 'Small';
-  
-  return { number, color, bigSmall };
-}
-
-// Add result to history
-function addToHistory(result) {
-  gameHistory.unshift({
-    period: currentPeriod,
-    ...result
-  });
-  
-  updateHistoryTable();
-  currentPeriod++;
-}
-
-// Update history table
 function updateHistoryTable() {
   const tbody = document.getElementById('historyBody');
   tbody.innerHTML = gameHistory.slice(0, 10).map(record => `
@@ -55,27 +31,92 @@ function updateHistoryTable() {
   `).join('');
 }
 
-// Game timer
-setInterval(() => {
-  timeRemaining--;
-  if (timeRemaining < 0) {
-    timeRemaining = 59;
-    const result = generateResult();
-    addToHistory(result);
-  }
+function placeBet(type, value, amount) {
+  fetch('/api/bet', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      userId: 'user1', // Temporary user ID
+      type,
+      value,
+      amount
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.error) {
+      alert(data.error);
+    } else {
+      wallet = data.balance;
+      updateWallet();
+    }
+  });
+}
+
+// Socket events
+socket.on('tick', data => {
+  timeRemaining = data.timeRemaining;
   updateTimer();
-}, 1000);
+});
+
+socket.on('newRound', data => {
+  currentPeriod = data.period;
+  timeRemaining = data.timeRemaining;
+  gameHistory.unshift(data.lastResult);
+  updateTimer();
+  updateHistoryTable();
+});
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
   updateWallet();
   updateTimer();
   
-  // Add click handlers
-  document.querySelectorAll('button').forEach(button => {
+  // Color buttons
+  document.querySelectorAll('.color-buttons button').forEach(button => {
     button.addEventListener('click', () => {
-      // Handle betting logic here
-      console.log('Bet placed:', button.textContent);
+      const color = button.className.split(' ')[0];
+      placeBet('color', color, selectedAmount);
     });
   });
+  
+  // Number buttons
+  document.querySelectorAll('.number-grid button').forEach(button => {
+    button.addEventListener('click', () => {
+      const number = parseInt(button.textContent);
+      placeBet('number', number, selectedAmount);
+    });
+  });
+  
+  // Big/Small buttons
+  document.querySelectorAll('.big-small button').forEach(button => {
+    button.addEventListener('click', () => {
+      const value = button.className === 'big' ? 'Big' : 'Small';
+      placeBet('bigSmall', value, selectedAmount);
+    });
+  });
+  
+  // Multiplier buttons
+  document.querySelectorAll('.multipliers button').forEach(button => {
+    button.addEventListener('click', () => {
+      selectedAmount = parseInt(button.textContent.substring(1));
+    });
+  });
+  
+  // Random bet
+  document.querySelector('.random').addEventListener('click', () => {
+    const number = Math.floor(Math.random() * 10);
+    placeBet('number', number, selectedAmount);
+  });
+  
+  // Fetch initial game state
+  fetch('/api/game/current')
+    .then(res => res.json())
+    .then(data => {
+      currentPeriod = data.period;
+      timeRemaining = data.timeRemaining;
+      gameHistory = data.history;
+      updateTimer();
+      updateHistoryTable();
+    });
 });
