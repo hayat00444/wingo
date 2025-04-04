@@ -1,16 +1,93 @@
+
 <!DOCTYPE html>
 <html>
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <title>replit</title>
+  <title>V3 Game</title>
   <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
-
 <body>
-  Hello world
+  <div class="game-container">
+    <header>
+      <div class="logo">V3 GAME</div>
+      <div class="wallet">
+        <span class="balance">₹4.76</span>
+        <div class="wallet-buttons">
+          <button class="withdraw-btn">Withdraw</button>
+          <button class="deposit-btn">Deposit</button>
+        </div>
+      </div>
+    </header>
+    
+    <div class="game-modes">
+      <button class="active">Win Go 1Min</button>
+      <button>Win Go 30S</button>
+      <button>Win Go 3Min</button>
+      <button>Win Go 5Min</button>
+      <button>Win Go 10Min</button>
+    </div>
+
+    <div class="timer-section">
+      <div class="period">202504040128</div>
+      <div class="countdown">00:59</div>
+    </div>
+
+    <div class="color-buttons">
+      <button class="green">Green 2X</button>
+      <button class="violet">Violet 4.5X</button>
+      <button class="red">Red 2X</button>
+    </div>
+
+    <div class="number-grid">
+      <button class="number violet">0</button>
+      <button class="number green">1</button>
+      <button class="number red">2</button>
+      <button class="number green">3</button>
+      <button class="number red">4</button>
+      <button class="number violet">5</button>
+      <button class="number red">6</button>
+      <button class="number green">7</button>
+      <button class="number red">8</button>
+      <button class="number green">9</button>
+    </div>
+
+    <div class="bet-controls">
+      <button class="random">Random</button>
+      <div class="multipliers">
+        <button>X1</button>
+        <button>X5</button>
+        <button>X10</button>
+        <button>X20</button>
+        <button>X50</button>
+        <button>X100</button>
+      </div>
+    </div>
+
+    <div class="big-small">
+      <button class="big">Big 2X</button>
+      <button class="small">Small 2X</button>
+    </div>
+
+    <div class="tabs">
+      <button class="active">Game history</button>
+      <button>Chart</button>
+      <button>My history</button>
+    </div>
+
+    <table class="history-table">
+      <thead>
+        <tr>
+          <th>Period</th>
+          <th>Number</th>
+          <th>Big/Small</th>
+          <th>Color</th>
+        </tr>
+      </thead>
+      <tbody id="historyBody">
+      </tbody>
+    </table>
+  </div>
   <script src="script.js"></script>
 </body>
-
 </html>

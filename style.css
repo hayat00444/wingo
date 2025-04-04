@@ -1,4 +1,146 @@
-html {
-  height: 100%;
+
+:root {
+  --primary-bg: #0a1929;
+  --secondary-bg: #1a2935;
+  --green: #4CAF50;
+  --violet: #9C27B0;
+  --red: #f44336;
+  --text: #ffffff;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--primary-bg);
+  color: var(--text);
+}
+
+.game-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.wallet {
+  text-align: right;
+}
+
+.balance {
+  display: block;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.wallet-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: white;
+  background: var(--secondary-bg);
+}
+
+.withdraw-btn {
+  background: var(--red);
+}
+
+.deposit-btn {
+  background: var(--green);
+}
+
+.game-modes {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+
+.timer-section {
+  background: var(--secondary-bg);
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.color-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.color-buttons button.green { background: var(--green); }
+.color-buttons button.violet { background: var(--violet); }
+.color-buttons button.red { background: var(--red); }
+
+.number-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.number {
+  aspect-ratio: 1;
+  font-size: 24px;
+  border-radius: 50%;
+}
+
+.bet-controls {
+  margin-bottom: 20px;
+}
+
+.multipliers {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.big-small {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.history-table {
   width: 100%;
+  border-collapse: collapse;
+}
+
+.history-table th,
+.history-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--secondary-bg);
+}
+
+button.active {
+  background: #2196F3;
 }
